@@ -5,8 +5,8 @@ const {
     register,
     login,
     logout,
-    nftUpload,
-    nftList,
+    imagesUpload,
+    imagesList,
     users,
     user,
     submitOffer,
@@ -14,14 +14,14 @@ const {
     rejectOffer,
     acceptOffer
 } = require('../controlers/mainControler')
-const { checkInputs, nftCheck } = require('../middleware/mainMiddleware')
+const { checkInputs, imagesCheck } = require('../middleware/mainMiddleware')
 
 router.post('/register', checkInputs, register)
 router.post('/login', login)
 router.get('/logout', logout)
 router.get('/autoLogin', autoLogin)
-router.post('/nftUpload', nftCheck, nftUpload)
-router.get('/nftList/:id', nftList)
+router.post('/imagesUpload', imagesCheck, imagesUpload)
+router.get('/imagesList/:id', imagesList)
 router.get('/users', users)
 router.get('/user/:id', user)
 router.post('/submitOffer', submitOffer)

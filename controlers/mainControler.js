@@ -29,17 +29,19 @@ module.exports = {
         delete req.session.user
         res.send({error:false, status: 'you are logged out'})
     },
-    nftUpload: (req, res) => {
-        const newNFT = new imageSchema
-        newNFT.image = req.body.image
-        newNFT.owner = req.session.user._id
-        try {newNFT.save()}
+    imagesUpload: (req, res) => {
+        const newimages = new imageSchema
+        newimages.image = req.body.image
+        newimages.owner = req.session.user._id
+        try {newimages.save()}
         catch (e){console.log(e)}
-        res.send({error: false, status: 'NFT uploaded successfully'})
+        res.send({error: false, status: 'images uploaded successfully'})
     },
-    nftList: async (req, res) => {
-        const nftList = await imageSchema.find({owner: req.params.id})
-        res.send({error: false, nfts: nftList})
+    imagesList: async (req, res) => {
+        console.log("images list trigered");
+        const imagesList = await imageSchema.find({owner: req.params.id})
+        res.send({error: false, images: imagesList})
+        console.log(imagesList);
     },
     users: async (req, res) => {
         const users = await userSchema.find( {_id:{$ne:req.session.user._id} })
@@ -47,8 +49,8 @@ module.exports = {
     },
     user: async (req, res) => {
         const user = await userSchema.findOne({_id: req.params.id})
-        const nftList = await imageSchema.find({owner: req.params.id})
-        res.send({user, nfts:nftList})
+        const imagesList = await imageSchema.find({owner: req.params.id})
+        res.send({user, images:imagesList})
     },
     submitOffer: async (req, res) => {
         const offer = new offerSchema
@@ -74,11 +76,11 @@ module.exports = {
     },
     acceptOffer: async (req, res) => {
         let offer = await offerSchema.findOne({_id:req.body.offerID})
-        offer.iget.map( async nft=>{
-            await imageSchema.findByIdAndUpdate(nft._id, {owner: offer.madeByID})
+        offer.iget.map( async images=>{
+            await imageSchema.findByIdAndUpdate(images._id, {owner: offer.madeByID})
         })
-        offer.youget.map( async nft=>{
-            await imageSchema.findByIdAndUpdate(nft._id, {owner: offer.madeToID})
+        offer.youget.map( async images=>{
+            await imageSchema.findByIdAndUpdate(images._id, {owner: offer.madeToID})
         })
         await offerSchema.findByIdAndDelete(req.body.offerID)
         let offers = []
